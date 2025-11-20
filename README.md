@@ -1,2 +1,2 @@
 # glass-tic-tac-toe
-The classic Tic Tac Toe game with elements imitaiting glass.
+The classic Tic Tac Toe game with elements imitating glass.
