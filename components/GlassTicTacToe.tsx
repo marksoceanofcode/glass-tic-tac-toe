@@ -4,6 +4,7 @@ import { boardTiles } from "@/data/boardTiles"
 import { PlayerId } from "../models/Player"
 import Circle from "../components/Circle"
 import XSymbol from "../components/XSymbol"
+import { Tile } from "../models/Tile"
 
 export type GlassTicTacToeProps = {
   id: string
@@ -12,6 +13,8 @@ export type GlassTicTacToeProps = {
 const GlassTicTacToe = ({ id }: GlassTicTacToeProps) => {
   //useState
   const [currentPlayer, setCurrentPlayer] = useState(PlayerId.one)
+  const [gameIsWon, setGameIsWon] = useState(false)
+  const [gameIsDrawn, setGameIsDrawn] = useState(false)
 
   function handlePlayerClick(event: React.MouseEvent<HTMLButtonElement>) {
     const tileId = event.currentTarget.id
@@ -24,22 +27,73 @@ const GlassTicTacToe = ({ id }: GlassTicTacToeProps) => {
     //       : tile
     //   )
     // )
-    for(let a=0; a < boardTiles.length; a++){
-      if(boardTiles[a].id === tileId){
+    for (let a = 0; a < boardTiles.length; a++) {
+      if (boardTiles[a].id === tileId) {
         boardTiles[a].selected = true
         boardTiles[a].player = currentPlayer
       }
     }
 
-    const nextPlayer = (currentPlayer === PlayerId.one) ? PlayerId.two : PlayerId.one
-    setCurrentPlayer(nextPlayer)
+    if (checkForWin()) {
+      setGameIsWon(true)
+    } else if (checkForDraw()) {
+      setGameIsDrawn(true)
+    } else {
+      const nextPlayer = currentPlayer === PlayerId.one ? PlayerId.two : PlayerId.one
+      setCurrentPlayer(nextPlayer)
+    }
+  }
+
+  function checkForWin() {
+    //Check for win condition
+    const checkRow = (a: Tile, b: Tile, c: Tile) =>
+      a.player === b.player &&
+      a.player === c.player &&
+      a.player !== PlayerId.none
+
+    if (
+      checkRow(boardTiles[0], boardTiles[1], boardTiles[2]) ||
+      checkRow(boardTiles[3], boardTiles[4], boardTiles[5]) ||
+      checkRow(boardTiles[6], boardTiles[7], boardTiles[8])
+    ) {
+      //Horizontal Win
+      return true
+    }
+
+    if (
+      checkRow(boardTiles[0], boardTiles[3], boardTiles[6]) ||
+      checkRow(boardTiles[1], boardTiles[4], boardTiles[7]) ||
+      checkRow(boardTiles[2], boardTiles[5], boardTiles[8])
+    ) {
+      //Vertical Win
+      return true
+    }
+
+    if (
+      checkRow(boardTiles[0], boardTiles[4], boardTiles[8]) ||
+      checkRow(boardTiles[2], boardTiles[4], boardTiles[6])
+    ) {
+      //Cross Win
+      return true
+    }
+
+    return false
+  }
+
+  function checkForDraw() {
+    //Check for draw condition
+    const emptyTileCount = boardTiles.filter((tile) => {
+      return tile.player === PlayerId.none
+    })
+
+    return emptyTileCount.length === 0 ? true : false
   }
 
   return (
     <>
-      <div>
+      <div className="bg-white/20 backdrop-blur-md mb-16 px-6 py-2 rounded-full dark:bg-black/20">
         <h2
-          className={`backdrop-blur-md font-bold mb-16 text-5xl text-center
+          className={`font-bold text-5xl text-center
             ${
               currentPlayer === PlayerId.one
                 ? "text-playerOne"
@@ -62,6 +116,7 @@ const GlassTicTacToe = ({ id }: GlassTicTacToeProps) => {
                   : "hover:bg-playerTwo/20 disabled:hover:bg-white/20 disabled:hover:dark:bg-black/20"
               }`}
               disabled={tile.player !== PlayerId.none}
+              key={index}
               onClick={handlePlayerClick}
             >
               {tile.player === PlayerId.one ? (
