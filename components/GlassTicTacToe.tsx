@@ -5,6 +5,7 @@ import { PlayerId } from "../models/Player"
 import Circle from "../components/Circle"
 import XSymbol from "../components/XSymbol"
 import { Tile } from "../models/Tile"
+import GameMsg from "../components/GameMsg"
 
 export type GlassTicTacToeProps = {
   id: string
@@ -16,14 +17,6 @@ const GlassTicTacToe = ({ id }: GlassTicTacToeProps) => {
   const [currentPlayer, setCurrentPlayer] = useState(PlayerId.one)
   const [gameIsWon, setGameIsWon] = useState(false)
   const [gameIsDrawn, setGameIsDrawn] = useState(false)
-
-  // useEffect(() => {
-  //   if (checkForWin(tiles)) {
-  //     setGameIsWon(true)
-  //   } else if (checkForDraw(tiles)) {
-  //     setGameIsDrawn(true)
-  //   }
-  // }, [tiles])
 
   function handlePlayerClick(event: React.MouseEvent<HTMLButtonElement>) {
     const tileId = event.currentTarget.id
@@ -49,23 +42,6 @@ const GlassTicTacToe = ({ id }: GlassTicTacToeProps) => {
 
       return updatedTiles
     })
-
-    // for (let a = 0; a < boardTiles.length; a++) {
-    //   if (boardTiles[a].id === tileId) {
-    //     boardTiles[a].selected = true
-    //     boardTiles[a].player = currentPlayer
-    //   }
-    // }
-
-    // if (checkForWin()) {
-    //   setGameIsWon(true)
-    // } else if (checkForDraw()) {
-    //   setGameIsDrawn(true)
-    // } else {
-    //   const nextPlayer =
-    //     currentPlayer === PlayerId.one ? PlayerId.two : PlayerId.one
-    //   setCurrentPlayer(nextPlayer)
-    // }
   }
 
   function checkForWin(allTiles: any) {
@@ -115,7 +91,7 @@ const GlassTicTacToe = ({ id }: GlassTicTacToeProps) => {
 
   return (
     <>
-      <div className="bg-white/20 backdrop-blur-md mb-16 px-6 py-2 rounded-full dark:bg-black/20">
+      <div className="bg-white/20 backdrop-blur-md mb-16 px-6 py-2 rounded-full w-96 dark:bg-black/20">
         <h2
           className={`font-bold text-5xl text-center
             ${
@@ -129,30 +105,39 @@ const GlassTicTacToe = ({ id }: GlassTicTacToeProps) => {
         </h2>
       </div>
       <div className="bg-white/20 backdrop-blur-md h-96 w-96 p-4 rounded-2xl shadow dark:bg-black/20">
-        <div className="grid grid-cols-3 gap-2 h-full rounded-2xl">
-          {tiles.map((tile, index) => (
-            <button
-              id={tile.id}
-              className={`bg-white/20 backdrop-blur-md content-center rounded-2xl text-center dark:bg-black/20
+        {gameIsWon || gameIsDrawn ? (
+          <GameMsg
+            id="game-message-container"
+            gameDrawn={gameIsDrawn}
+            gameWon={gameIsWon}
+            player={currentPlayer}
+          />
+        ) : (
+          <div className="grid grid-cols-3 gap-2 h-full rounded-2xl">
+            {tiles.map((tile, index) => (
+              <button
+                id={tile.id}
+                className={`bg-white/20 backdrop-blur-md content-center rounded-2xl text-center dark:bg-black/20
               ${
                 currentPlayer === PlayerId.one
                   ? "hover:bg-playerOne/20 disabled:hover:bg-white/20 disabled:hover:dark:bg-black/20"
                   : "hover:bg-playerTwo/20 disabled:hover:bg-white/20 disabled:hover:dark:bg-black/20"
               }`}
-              disabled={tile.player !== PlayerId.none}
-              key={index}
-              onClick={handlePlayerClick}
-            >
-              {tile.player === PlayerId.one ? (
-                <Circle />
-              ) : tile.player === PlayerId.two ? (
-                <XSymbol />
-              ) : (
-                <div className="h-16"></div>
-              )}
-            </button>
-          ))}
-        </div>
+                disabled={tile.player !== PlayerId.none}
+                key={index}
+                onClick={handlePlayerClick}
+              >
+                {tile.player === PlayerId.one ? (
+                  <Circle />
+                ) : tile.player === PlayerId.two ? (
+                  <XSymbol />
+                ) : (
+                  <div className="h-16"></div>
+                )}
+              </button>
+            ))}
+          </div>
+        )}
       </div>
     </>
   )
