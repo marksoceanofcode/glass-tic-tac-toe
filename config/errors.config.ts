@@ -1,6 +1,3 @@
-export interface ErrorsConfig {
-}
+export interface ErrorsConfig {}
 
-export const errorMessages: Record<string, ErrorsConfig> = {
-    
-}
+export const errorMessages: Record<string, ErrorsConfig> = {}
