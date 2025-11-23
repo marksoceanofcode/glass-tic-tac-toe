@@ -1,4 +1,4 @@
-import { useState, useRef } from "react"
+import { useEffect, useState, useRef } from "react"
 import { errorMessages } from "@/config/errors.config"
 import { boardTiles } from "@/data/boardTiles"
 import { PlayerId } from "../models/Player"
@@ -12,40 +12,63 @@ export type GlassTicTacToeProps = {
 
 const GlassTicTacToe = ({ id }: GlassTicTacToeProps) => {
   //useState
+  const [tiles, setTiles] = useState(boardTiles)
   const [currentPlayer, setCurrentPlayer] = useState(PlayerId.one)
   const [gameIsWon, setGameIsWon] = useState(false)
   const [gameIsDrawn, setGameIsDrawn] = useState(false)
 
+  // useEffect(() => {
+  //   if (checkForWin(tiles)) {
+  //     setGameIsWon(true)
+  //   } else if (checkForDraw(tiles)) {
+  //     setGameIsDrawn(true)
+  //   }
+  // }, [tiles])
+
   function handlePlayerClick(event: React.MouseEvent<HTMLButtonElement>) {
     const tileId = event.currentTarget.id
 
-    // Update the board tiles to set the clicked tile's player
-    // setBoardTiles((prevTiles) =>
-    //   prevTiles.map((tile) =>
-    //     tile.id === tileId && tile.player === null
-    //       ? { ...tile, player: currentPlayer }
-    //       : tile
-    //   )
-    // )
-    for (let a = 0; a < boardTiles.length; a++) {
-      if (boardTiles[a].id === tileId) {
-        boardTiles[a].selected = true
-        boardTiles[a].player = currentPlayer
-      }
-    }
+    setTiles((prevTiles) => {
+      //This is cool thanks Claude! prevTiles is an arbitrary parameter name, just the current state stored for tiles and we update tiles with what we return
+      const updatedTiles = prevTiles.map((tile) =>
+        tile.id === tileId && tile.player === PlayerId.none
+          ? { ...tile, selected: true, player: currentPlayer }
+          : tile
+      )
 
-    if (checkForWin()) {
-      setGameIsWon(true)
-    } else if (checkForDraw()) {
-      setGameIsDrawn(true)
-    } else {
-      const nextPlayer =
-        currentPlayer === PlayerId.one ? PlayerId.two : PlayerId.one
-      setCurrentPlayer(nextPlayer)
-    }
+      // Check win/draw with the updated tiles
+      if (checkForWin(updatedTiles)) {
+        setGameIsWon(true)
+      } else if (checkForDraw(updatedTiles)) {
+        setGameIsDrawn(true)
+      } else {
+        setCurrentPlayer(
+          currentPlayer === PlayerId.one ? PlayerId.two : PlayerId.one
+        )
+      }
+
+      return updatedTiles
+    })
+
+    // for (let a = 0; a < boardTiles.length; a++) {
+    //   if (boardTiles[a].id === tileId) {
+    //     boardTiles[a].selected = true
+    //     boardTiles[a].player = currentPlayer
+    //   }
+    // }
+
+    // if (checkForWin()) {
+    //   setGameIsWon(true)
+    // } else if (checkForDraw()) {
+    //   setGameIsDrawn(true)
+    // } else {
+    //   const nextPlayer =
+    //     currentPlayer === PlayerId.one ? PlayerId.two : PlayerId.one
+    //   setCurrentPlayer(nextPlayer)
+    // }
   }
 
-  function checkForWin() {
+  function checkForWin(allTiles: any) {
     //Check for win condition
     const checkRow = (a: Tile, b: Tile, c: Tile) =>
       a.player === b.player &&
@@ -53,26 +76,26 @@ const GlassTicTacToe = ({ id }: GlassTicTacToeProps) => {
       a.player !== PlayerId.none
 
     if (
-      checkRow(boardTiles[0], boardTiles[1], boardTiles[2]) ||
-      checkRow(boardTiles[3], boardTiles[4], boardTiles[5]) ||
-      checkRow(boardTiles[6], boardTiles[7], boardTiles[8])
+      checkRow(allTiles[0], allTiles[1], allTiles[2]) ||
+      checkRow(allTiles[3], allTiles[4], allTiles[5]) ||
+      checkRow(allTiles[6], allTiles[7], allTiles[8])
     ) {
       //Horizontal Win
       return true
     }
 
     if (
-      checkRow(boardTiles[0], boardTiles[3], boardTiles[6]) ||
-      checkRow(boardTiles[1], boardTiles[4], boardTiles[7]) ||
-      checkRow(boardTiles[2], boardTiles[5], boardTiles[8])
+      checkRow(allTiles[0], allTiles[3], allTiles[6]) ||
+      checkRow(allTiles[1], allTiles[4], allTiles[7]) ||
+      checkRow(allTiles[2], allTiles[5], allTiles[8])
     ) {
       //Vertical Win
       return true
     }
 
     if (
-      checkRow(boardTiles[0], boardTiles[4], boardTiles[8]) ||
-      checkRow(boardTiles[2], boardTiles[4], boardTiles[6])
+      checkRow(allTiles[0], allTiles[4], allTiles[8]) ||
+      checkRow(allTiles[2], allTiles[4], allTiles[6])
     ) {
       //Cross Win
       return true
@@ -81,9 +104,9 @@ const GlassTicTacToe = ({ id }: GlassTicTacToeProps) => {
     return false
   }
 
-  function checkForDraw() {
+  function checkForDraw(allTiles: any) {
     //Check for draw condition
-    const emptyTileCount = boardTiles.filter((tile) => {
+    const emptyTileCount = allTiles.filter((tile: Tile) => {
       return tile.player === PlayerId.none
     })
 
@@ -107,7 +130,7 @@ const GlassTicTacToe = ({ id }: GlassTicTacToeProps) => {
       </div>
       <div className="bg-white/20 backdrop-blur-md h-96 w-96 p-4 rounded-2xl shadow dark:bg-black/20">
         <div className="grid grid-cols-3 gap-2 h-full rounded-2xl">
-          {boardTiles.map((tile, index) => (
+          {tiles.map((tile, index) => (
             <button
               id={tile.id}
               className={`bg-white/20 backdrop-blur-md content-center rounded-2xl text-center dark:bg-black/20
