@@ -39,7 +39,8 @@ const GlassTicTacToe = ({ id }: GlassTicTacToeProps) => {
     } else if (checkForDraw()) {
       setGameIsDrawn(true)
     } else {
-      const nextPlayer = currentPlayer === PlayerId.one ? PlayerId.two : PlayerId.one
+      const nextPlayer =
+        currentPlayer === PlayerId.one ? PlayerId.two : PlayerId.one
       setCurrentPlayer(nextPlayer)
     }
   }
