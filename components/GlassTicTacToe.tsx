@@ -6,6 +6,7 @@ import Circle from "../components/Circle"
 import XSymbol from "../components/XSymbol"
 import { Tile } from "../models/Tile"
 import GameMsg from "../components/GameMsg"
+import PrimaryButton from "./PrimaryButton"
 
 export type GlassTicTacToeProps = {
   id: string
@@ -89,9 +90,27 @@ const GlassTicTacToe = ({ id }: GlassTicTacToeProps) => {
     return emptyTileCount.length === 0 ? true : false
   }
 
+  function playAgain() {
+    //Reset the board
+    setTiles((prevTiles) => {
+      const updatedTiles = prevTiles.map((tile) => {
+        tile.player = PlayerId.none
+        tile.selected = false
+        return tile
+      })
+      return updatedTiles
+    })
+
+    //Reset the darw/win tracking
+    setGameIsDrawn(false)
+    setGameIsWon(false)
+
+    return
+  }
+
   return (
     <>
-      <div className="bg-white/20 backdrop-blur-md mb-16 px-6 py-2 rounded-full w-96 dark:bg-black/20">
+      <div className="bg-white/20 backdrop-blur-md mb-16 px-6 py-2 shadow rounded-full w-96 dark:bg-black/20">
         <h2
           className={`font-bold text-5xl text-center
             ${
@@ -101,27 +120,37 @@ const GlassTicTacToe = ({ id }: GlassTicTacToeProps) => {
             }
           `}
         >
-          Player {currentPlayer}&apos;s turn
-        </h2>
+          Player {currentPlayer}
+        </h2>{" "}
+        {/*&apos;s turn*/}
       </div>
       <div className="bg-white/20 backdrop-blur-md h-96 w-96 p-4 rounded-2xl shadow dark:bg-black/20">
         {gameIsWon || gameIsDrawn ? (
-          <GameMsg
-            id="game-message-container"
-            gameDrawn={gameIsDrawn}
-            gameWon={gameIsWon}
-            player={currentPlayer}
-          />
+          <>
+            <GameMsg
+              id="game-message-container"
+              gameDrawn={gameIsDrawn}
+              gameWon={gameIsWon}
+              player={currentPlayer}
+            />
+            <div className="flex justify-center items-center mt-24">
+              <PrimaryButton
+                id="play-again"
+                buttonText="Play Again"
+                onClick={playAgain}
+              />
+            </div>
+          </>
         ) : (
           <div className="grid grid-cols-3 gap-2 h-full rounded-2xl">
             {tiles.map((tile, index) => (
               <button
                 id={tile.id}
-                className={`bg-white/20 backdrop-blur-md content-center rounded-2xl text-center dark:bg-black/20
+                className={`bg-black/20 backdrop-blur-md content-center rounded-2xl text-center dark:bg-black/20
               ${
                 currentPlayer === PlayerId.one
-                  ? "hover:bg-playerOne/20 disabled:hover:bg-white/20 disabled:hover:dark:bg-black/20"
-                  : "hover:bg-playerTwo/20 disabled:hover:bg-white/20 disabled:hover:dark:bg-black/20"
+                  ? "hover:bg-playerOne/20 disabled:hover:bg-black/20 disabled:hover:dark:bg-black/20"
+                  : "hover:bg-playerTwo/20 disabled:hover:bg-black/20 disabled:hover:dark:bg-black/20"
               }`}
                 disabled={tile.player !== PlayerId.none}
                 key={index}
