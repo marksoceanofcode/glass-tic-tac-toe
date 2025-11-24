@@ -1,3 +1,1 @@
-export const palceholder = (something: string) => {
-  //Not in use
-}
+//Not in use - Functions could be moved here later

@@ -17,12 +17,11 @@ const GameMsg = ({ id, gameDrawn, gameWon, player }: GameMsgProps) => {
     <div className="relative text-center">
       {gameWon ? (
         <div className="absolute inset-16 flex justify-center items-center pointer-events-none">
-          <img src="confetti.gif" className="w-full" />
+          <img alt="" src="confetti.gif" className="w-full" />
         </div>
       ) : (
         <></>
       )}
-
       <h4 className="font-bold font-dark-gray text-2xl dark:text-white">
         {message}
       </h4>
