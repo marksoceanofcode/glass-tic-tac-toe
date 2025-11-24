@@ -3,7 +3,7 @@ The classic Tic Tac Toe game with elements imitating glass.
 
 ## Requirements
 Have **node.js** installed running version **^22.x.x** _(Skip below steps if you already have this version of node installed)_
-- If using [brew](https://formulae.brew.sh/formula/node), use: _brew install node@22_
+- If using [brew](https://formulae.brew.sh/formula/node), use: ```brew install node@22```
 - Otherwise, install node how you would otherwise for you dev environment
 
 
@@ -11,6 +11,6 @@ Have **node.js** installed running version **^22.x.x** _(Skip below steps if you
 Quick steps to get this working. _I will use Yarn 1 (classic) as an example for commands_
 1. Clone this repository to your local computer
 2. Once cloned, navigate to the root of the project directory
-3. Run: ```bash yarn install ```
-4. Run: _yarn dev_
+3. Run: ```yarn install```
+4. Run: ```yarn dev```
     - You should now see the app running on [http://localhost:3000](http://localhost:3000)
