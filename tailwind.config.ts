@@ -12,9 +12,12 @@ const config: Config = {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic":
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
+        "confetti-gif": "url('/confetti.gif')",
+        "main-pattern": "url('/images/oAndXPattern.webp')",
       },
       colors: {
         "dark-gray": "#151515",
+        "lighter-gray": "#262626ff",
         playerOne: "#3B82F6",
         playerTwo: "#EF4444",
       },
