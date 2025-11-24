@@ -2,7 +2,7 @@
   "name": "glass-tic-tac-toe",
   "displayName": "Glass Tic-Tac-Toe",
   "description": "The classic Tic-Tac-Toe game with elements imitating glass.",
-  "version": "0.8.1",
+  "version": "0.8.2",
   "publisher": "marksoceanofcode",
   "license": "SEE LICENSE IN LICENSE.md",
   "repository": {
