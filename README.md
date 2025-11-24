@@ -4,7 +4,7 @@ The classic Tic Tac Toe game with elements imitating glass.
 ## Requirements
 Have **node.js** installed running version **^22.x.x** _(Skip below steps if you already have this version of node installed)_
 - If using [brew](https://formulae.brew.sh/formula/node), use: _brew install node@22_
-- Otherwise, install node how would otherwise for you dev environment
+- Otherwise, install node how you would otherwise for you dev environment
 
 
 ## Setup Guide
